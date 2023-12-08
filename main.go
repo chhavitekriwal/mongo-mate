@@ -1,45 +1,52 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
+	"log"
+	"os"
 	"strings"
+
+	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Oplog struct {
-	Op   string       `json:"op"`
-	NS   string      `json:"ns"`
-	O map[string]interface{} `json:"o"`
+	Op   string
+	NS   string
+	O map[string]interface{}
 }
 
 
 func main() {
-	jsonData := `
-		{
-			"op": "i",
-			"ns": "test.student",
-			"o": {
-				"_id": "635b79e231d82a8ab1de863b",
-				"name": "Selena Miller",
-				"roll_no": 51,
-				"is_graduated": false,
-				"date_of_birth": "2000-01-30"
-			},
-			"p": "Q"
-		}
-	`
-	convertOplogToSQL(jsonData)
-} 
-func convertOplogToSQL(oplog string) string {
-	var oplogObject Oplog
-	err := json.Unmarshal([]byte(oplog), &oplogObject)
-	if err != nil {
-		fmt.Printf("Could not parse oplog JSON\n%v",err)
-		return ""
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
 	}
-	switch oplogObject.Op {
+
+	mongoURI := os.Getenv("MONGO_URI")
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(mongoURI))
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			panic(err)
+		}
+	}()
+
+	oplogCollection := client.Database("local").Collection("oplog.rs")
+	var oplog Oplog
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","i"}}).Decode(&oplog)
+	fmt.Println(convertOplogToSQL(oplog))
+} 
+
+func convertOplogToSQL(oplog Oplog) string {
+	switch oplog.Op {
 		case "i": 
-			return parseInsertOplog(oplogObject)
+			return parseInsertOplog(oplog)
 		default:
 			return ""
 	}
@@ -51,10 +58,12 @@ func parseInsertOplog(oplog Oplog) string {
 	for key,value := range oplog.O {
 		fields = append(fields, key)
 		switch v:= value.(type) {
-		case int,float32,float64:
+			case int,int32,float32,float64:
 				values = append(values,fmt.Sprintf("%v",v))
 			case bool:
 				values = append(values,fmt.Sprintf("%t",v))
+			case primitive.ObjectID:
+				values = append(values,fmt.Sprintf("'%s'",v.Hex()))
 			case string:
 				values = append(values,fmt.Sprintf("'%s'",v))
 			default:
