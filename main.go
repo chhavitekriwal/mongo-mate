@@ -18,6 +18,7 @@ type Oplog struct {
 	Op   string
 	NS   string
 	O map[string]interface{}
+	O2 map[string] interface{}
 }
 
 
@@ -39,7 +40,7 @@ func main() {
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
 	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","i"}}).Decode(&oplog)
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","u"}}).Decode(&oplog)
 	fmt.Println(convertOplogToSQL(oplog))
 } 
 
@@ -47,6 +48,8 @@ func convertOplogToSQL(oplog Oplog) string {
 	switch oplog.Op {
 		case "i": 
 			return parseInsertOplog(oplog)
+		case "u":
+			return parseUpdateOplog(oplog)
 		default:
 			return ""
 	}
@@ -73,4 +76,27 @@ func parseInsertOplog(oplog Oplog) string {
 	
 	insertSQL := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)",oplog.NS,strings.Join(fields,","),strings.Join(values,","))
 	return insertSQL
+}
+
+func parseUpdateOplog(oplog Oplog) string {
+	fieldsToUpdate := oplog.O["diff"].(map[string]interface{})["u"].(map[string]interface{})
+	updateSQL := fmt.Sprintf("UPDATE %s SET ",oplog.NS)
+	for key,value := range fieldsToUpdate { 
+		updateSQL += fmt.Sprintf("%s = ",key)
+		switch v:= value.(type) {
+			case int,int32,float32,float64:
+				updateSQL += fmt.Sprintf("%v",v)
+			case bool:
+				updateSQL += fmt.Sprintf("%t",v)
+			case primitive.ObjectID:
+				updateSQL += fmt.Sprintf("'%s'",v.Hex())
+			case string:
+				updateSQL += fmt.Sprintf("'%s'",v)
+			default:
+				fmt.Printf("%T",v)
+		} 
+	}
+	documentID := oplog.O2["_id"].(primitive.ObjectID).Hex()
+	updateSQL += fmt.Sprintf(" WHERE _id = '%s'",documentID)
+	return updateSQL
 }
