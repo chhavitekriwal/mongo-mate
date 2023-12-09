@@ -67,12 +67,20 @@ func parseInsertOplog(oplog Oplog) string {
 }
 
 func parseUpdateOplog(oplog Oplog) string {
-	fieldsToUpdate := oplog.O["diff"].(map[string]interface{})["u"].(map[string]interface{})
+	diffMap := oplog.O["diff"].(map[string]interface{})
 	updateSQL := fmt.Sprintf("UPDATE %s SET",oplog.NS)
-	for key,value := range fieldsToUpdate { 
-		updateSQL += fmt.Sprintf(" %s = %s,",key,getFieldValue(value))
+	for key := range diffMap { 
+		fields := diffMap[key].(map[string]interface{})
+		for field,value := range fields {
+			if key == "u" {
+				updateSQL += fmt.Sprintf(" %s = %s,",field,getFieldValue(value))
+			} else if key == "d" {
+				updateSQL += fmt.Sprintf(" %s = NULL,",field)
+			}
+		}		
 	}
 	updateSQL = updateSQL[:len(updateSQL)-1]
+
 	documentID := oplog.O2["_id"].(primitive.ObjectID).Hex()
 	updateSQL += fmt.Sprintf(" WHERE _id = '%s'",documentID)
 	return updateSQL
