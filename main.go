@@ -40,7 +40,7 @@ func main() {
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
 	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","i"}}).Decode(&oplog)
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","u"}}).Decode(&oplog)
 	fmt.Println(convertOplogToSQL(oplog))
 } 
 
@@ -68,10 +68,11 @@ func parseInsertOplog(oplog Oplog) string {
 
 func parseUpdateOplog(oplog Oplog) string {
 	fieldsToUpdate := oplog.O["diff"].(map[string]interface{})["u"].(map[string]interface{})
-	updateSQL := fmt.Sprintf("UPDATE %s SET ",oplog.NS)
+	updateSQL := fmt.Sprintf("UPDATE %s SET",oplog.NS)
 	for key,value := range fieldsToUpdate { 
-		updateSQL += fmt.Sprintf("%s = %s",key,getFieldValue(value))
+		updateSQL += fmt.Sprintf(" %s = %s,",key,getFieldValue(value))
 	}
+	updateSQL = updateSQL[:len(updateSQL)-1]
 	documentID := oplog.O2["_id"].(primitive.ObjectID).Hex()
 	updateSQL += fmt.Sprintf(" WHERE _id = '%s'",documentID)
 	return updateSQL
