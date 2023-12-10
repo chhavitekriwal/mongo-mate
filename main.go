@@ -80,9 +80,7 @@ func parseUpdateOplog(oplog Oplog) string {
 		}		
 	}
 	updateSQL = updateSQL[:len(updateSQL)-1]
-
-	documentID := oplog.O2["_id"].(primitive.ObjectID).Hex()
-	updateSQL += fmt.Sprintf(" WHERE _id = '%s'",documentID)
+	updateSQL += getFilter(oplog.O2)
 	return updateSQL
 }
 
@@ -99,4 +97,9 @@ func getFieldValue(value interface{}) string {
 		default:
 			return ""
 	}
+}
+
+func getFilter(filterMap map[string]interface{}) string {
+	documentID := filterMap["_id"].(primitive.ObjectID).Hex()
+	return fmt.Sprintf(" WHERE _id = '%s'",documentID)
 }
