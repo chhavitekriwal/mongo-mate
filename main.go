@@ -40,7 +40,7 @@ func main() {
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
 	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","u"}}).Decode(&oplog)
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","d"}}).Decode(&oplog)
 	fmt.Println(convertOplogToSQL(oplog))
 } 
 
@@ -50,6 +50,8 @@ func convertOplogToSQL(oplog Oplog) string {
 			return parseInsertOplog(oplog)
 		case "u":
 			return parseUpdateOplog(oplog)
+		case "d":
+			return parseDeleteOplog(oplog)
 		default:
 			return ""
 	}
@@ -84,6 +86,10 @@ func parseUpdateOplog(oplog Oplog) string {
 	return updateSQL
 }
 
+func parseDeleteOplog(oplog Oplog) string {
+	deleteSQL := fmt.Sprintf("DELETE FROM %s%s", oplog.NS,getFilter(oplog.O))
+	return deleteSQL
+}
 func getFieldValue(value interface{}) string {
 	switch v:= value.(type) {
 		case int,int32,float32,float64:
