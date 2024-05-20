@@ -40,7 +40,7 @@ func main() {
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
 	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"o.name","ABC"}}).Decode(&oplog)
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","u"}}).Decode(&oplog)
 	fmt.Println(convertOplogToSQL(oplog))
 } 
 
@@ -74,9 +74,10 @@ func parseUpdateOplog(oplog Oplog) string {
 	for key := range diffMap { 
 		fields := diffMap[key].(map[string]interface{})
 		for field,value := range fields {
-			if key == "u" {
+			switch key {
+			case "u","i":
 				updateSQL += fmt.Sprintf(" %s = %s,",field,getFieldValue(value))
-			} else if key == "d" {
+			case "d":
 				updateSQL += fmt.Sprintf(" %s = NULL,",field)
 			}
 		}		
