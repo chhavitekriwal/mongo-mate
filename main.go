@@ -40,7 +40,7 @@ func main() {
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
 	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","i"}}).Decode(&oplog)
+	err = oplogCollection.FindOne(context.TODO(), bson.D{{"o.name","ABC"}}).Decode(&oplog)
 	fmt.Println(convertOplogToSQL(oplog))
 } 
 
@@ -101,7 +101,7 @@ func getFieldValue(value interface{}) string {
 		case string:
 			return fmt.Sprintf("'%s'",v)
 		case primitive.DateTime:
-			return fmt.Sprintf("'%s'",v.Time().Format("2006-01-02"))
+			return fmt.Sprintf("'%s'",v.Time().Format("2006-01-02 15:04:05-07:00"))
 		default:
 			return ""
 	}
