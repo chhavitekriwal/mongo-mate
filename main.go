@@ -39,14 +39,25 @@ func main() {
 	}()
 
 	oplogCollection := client.Database("local").Collection("oplog.rs")
-	var oplog Oplog
-	err = oplogCollection.FindOne(context.TODO(), bson.D{{"op","u"}}).Decode(&oplog)
-	fmt.Println(convertOplogToSQL(oplog))
+	filter := bson.M{"op": bson.M{"$ne": "c"}}
+	cursor, err := oplogCollection.Find(context.TODO(), filter);
+	if err != nil {
+		panic(err)
+	}
+
+	var oplogs []Oplog
+	if err = cursor.All(context.TODO(), &oplogs); err != nil {
+		panic(err)
+	}
+
+	for _,oplog := range oplogs {
+		fmt.Println(convertOplogToSQL(oplog))
+	}
 } 
 
 func convertOplogToSQL(oplog Oplog) string {
 	switch oplog.Op {
-		case "i": 
+		case "i":
 			return parseInsertOplog(oplog)
 		case "u":
 			return parseUpdateOplog(oplog)
@@ -58,14 +69,19 @@ func convertOplogToSQL(oplog Oplog) string {
 }
 
 func parseInsertOplog(oplog Oplog) string {
+	schemaSQL := fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s;\n",strings.Split(oplog.NS,".")[0])
 	fields := make([]string, 0)
 	values := make([]string,0)
+	types := make([]string,0)
 	for key,value := range oplog.O {
 		fields = append(fields, key)
 		values = append(values,getFieldValue(value))
+		types = append(types, fmt.Sprintf("%s %s",key,getSQLDataType(value)))
 	}	
-	insertSQL := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)",oplog.NS,strings.Join(fields,","),strings.Join(values,","))
-	return insertSQL
+	tableSQL := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (%s);\n",oplog.NS,strings.Join(types,","))
+	insertSQL := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",oplog.NS,strings.Join(fields,","),strings.Join(values,","))
+	// For now the create schema and create table are generated for each insert operation, will change later
+	return schemaSQL+tableSQL+insertSQL
 }
 
 func parseUpdateOplog(oplog Oplog) string {
@@ -83,7 +99,7 @@ func parseUpdateOplog(oplog Oplog) string {
 		}		
 	}
 	updateSQL = updateSQL[:len(updateSQL)-1]
-	updateSQL += getFilter(oplog.O2)
+	updateSQL += getFilter(oplog.O2)+";"
 	return updateSQL
 }
 
@@ -111,4 +127,21 @@ func getFieldValue(value interface{}) string {
 func getFilter(filterMap map[string]interface{}) string {
 	documentID := filterMap["_id"].(primitive.ObjectID).Hex()
 	return fmt.Sprintf(" WHERE _id = '%s'",documentID)
+}
+
+func getSQLDataType(value interface{}) string {
+	switch value.(type) {
+		case int,int32:
+			return "integer"
+		case float32,float64:
+			return "float"
+		case bool:
+			return "boolean"
+		case string,primitive.ObjectID:
+			return "text"
+		case primitive.DateTime:
+			return "timestamptz"
+		default:
+			return "text"
+	}
 }
