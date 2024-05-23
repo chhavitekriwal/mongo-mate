@@ -68,20 +68,24 @@ func convertOplogToSQL(oplog Oplog) string {
 	}
 }
 
+var schemaTableRelations = map[string]bool{}
+
 func parseInsertOplog(oplog Oplog) string {
-	schemaSQL := fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s;\n",strings.Split(oplog.NS,".")[0])
+	var sql string
+
+	if _,exists := schemaTableRelations[oplog.NS]; !exists {
+		sql += createSchemaAndTableSQL(oplog)
+		schemaTableRelations[oplog.NS] = true
+	} 
 	fields := make([]string, 0)
 	values := make([]string,0)
-	types := make([]string,0)
+	
 	for key,value := range oplog.O {
 		fields = append(fields, key)
 		values = append(values,getFieldValue(value))
-		types = append(types, fmt.Sprintf("%s %s",key,getSQLDataType(value)))
-	}	
-	tableSQL := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (%s);\n",oplog.NS,strings.Join(types,","))
-	insertSQL := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",oplog.NS,strings.Join(fields,","),strings.Join(values,","))
-	// For now the create schema and create table are generated for each insert operation, will change later
-	return schemaSQL+tableSQL+insertSQL
+	}
+	sql += fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",oplog.NS,strings.Join(fields,","),strings.Join(values,","))
+	return sql;
 }
 
 func parseUpdateOplog(oplog Oplog) string {
@@ -104,7 +108,7 @@ func parseUpdateOplog(oplog Oplog) string {
 }
 
 func parseDeleteOplog(oplog Oplog) string {
-	deleteSQL := fmt.Sprintf("DELETE FROM %s%s", oplog.NS,getFilter(oplog.O))
+	deleteSQL := fmt.Sprintf("DELETE FROM %s%s;", oplog.NS,getFilter(oplog.O))
 	return deleteSQL
 }
 func getFieldValue(value interface{}) string {
@@ -144,4 +148,14 @@ func getSQLDataType(value interface{}) string {
 		default:
 			return "text"
 	}
+}
+
+func createSchemaAndTableSQL(oplog Oplog) string {
+	sql := fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s;\n", strings.Split(oplog.NS, ".")[0])
+	types := make([]string,0)
+	for field, value := range oplog.O {
+		types = append(types, fmt.Sprintf("%s %s",field,getSQLDataType(value)))
+	};
+	sql += fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (%s);\n",oplog.NS,strings.Join(types, ","))
+	return sql;
 }
