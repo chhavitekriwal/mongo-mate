@@ -1,0 +1,594 @@
+[{
+  "op": "c",
+  "ns": "college_data.$cmd",
+  "ui": {
+    "$binary": {
+      "base64": "vkeW6m9zQKm/Rg2+botD8Q==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "create": "students",
+    "idIndex": {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  },
+  "ts": {
+    "$timestamp": {
+      "t": 1716190927,
+      "i": 2
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T07:42:07.097Z"
+  }
+},
+{
+  "op": "c",
+  "ns": "college_data.$cmd",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "create": "student",
+    "idIndex": {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  },
+  "ts": {
+    "$timestamp": {
+      "t": 1716191428,
+      "i": 10
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T07:50:28.898Z"
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "/p9N9CuLS6eWny8gKPEg9Q==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "i",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "_id": {
+      "$oid": "664b00c4d5e7a232e1483719"
+    },
+    "name": "XYZ",
+    "roll_no": 21,
+    "is_graduated": true,
+    "date_of_birth": {
+      "$date": "2001-05-18T00:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2024-05-20T07:50:00.000Z"
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b00c4d5e7a232e1483719"
+    }
+  },
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716191428,
+      "i": 11
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T07:50:28.899Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "op": "c",
+  "ns": "college_data.$cmd",
+  "ui": {
+    "$binary": {
+      "base64": "vkeW6m9zQKm/Rg2+botD8Q==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "drop": "students"
+  },
+  "o2": {
+    "numRecords": 0
+  },
+  "ts": {
+    "$timestamp": {
+      "t": 1716191450,
+      "i": 8
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T07:50:50.886Z"
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "22nE75ihQm6gJy5mUucStQ==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "u",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "$v": 2,
+    "diff": {
+      "d": {
+        "createdAt": false
+      },
+      "i": {
+        "created_at": {
+          "$date": "2024-05-20T07:50:00.000Z"
+        }
+      }
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b00c4d5e7a232e1483719"
+    }
+  },
+  "needsRetryImage": "postImage",
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716192465,
+      "i": 3
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T08:07:45.272Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "bx794MsdQ7SB3YgUwGusXw==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "i",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "_id": {
+      "$oid": "664b28b78f0edc72c0213f06"
+    },
+    "name": "ABC",
+    "roll_no": 22,
+    "is_graduated": false,
+    "date_of_birth": {
+      "$date": "2001-05-17T18:30:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2024-05-20T02:20:00.000Z"
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b28b78f0edc72c0213f06"
+    }
+  },
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716201658,
+      "i": 5
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T10:40:58.127Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "WJKdccYOSVqUz0Jw/WTMvA==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "u",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "$v": 2,
+    "diff": {
+      "d": {
+        "createdAt": false
+      },
+      "i": {
+        "created_at": {
+          "$date": "2024-05-20T02:20:00.000Z"
+        }
+      }
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b28b78f0edc72c0213f06"
+    }
+  },
+  "needsRetryImage": "postImage",
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716202228,
+      "i": 11
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T10:50:28.770Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "H5A2ZXApTp2u0/GLhOL+Vg==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "u",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "$v": 2,
+    "diff": {
+      "u": {
+        "roll_no": 25
+      }
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b28b78f0edc72c0213f06"
+    }
+  },
+  "needsRetryImage": "postImage",
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716202596,
+      "i": 11
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T10:56:36.607Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "/Nxnz91dQGaL2rDXYE+sHQ==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "u",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "$v": 2,
+    "diff": {
+      "u": {
+        "roll_no": 29
+      }
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b00c4d5e7a232e1483719"
+    }
+  },
+  "needsRetryImage": "postImage",
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716203554,
+      "i": 6
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T11:12:34.070Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "tvwANmnARb+EWFpN4vxmkQ==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "i",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "_id": {
+      "$oid": "664b31528f0edc72c0213f11"
+    },
+    "name": "ABC",
+    "roll_no": 30,
+    "is_graduated": true,
+    "date_of_birth": {
+      "$date": "2001-05-17T13:00:00.000Z"
+    },
+    "created_at": {
+      "$date": "2024-05-20T11:17:00.000Z"
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b31528f0edc72c0213f11"
+    }
+  },
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716203860,
+      "i": 10
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T11:17:40.864Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+},
+{
+  "lsid": {
+    "id": {
+      "$binary": {
+        "base64": "KLy5+lOXRAOGrlB6plbbaw==",
+        "subType": "04"
+      }
+    },
+    "uid": {
+      "$binary": {
+        "base64": "ddqot68vLpBUPnOuqFj2cdClv/dv/vF9ZVSwknYHEsE=",
+        "subType": "00"
+      }
+    }
+  },
+  "txnNumber": 1,
+  "op": "u",
+  "ns": "college_data.student",
+  "ui": {
+    "$binary": {
+      "base64": "o4Uulvz9RJKT9wl4Q1/l3g==",
+      "subType": "04"
+    }
+  },
+  "o": {
+    "$v": 2,
+    "diff": {
+      "u": {
+        "roll_no": 35
+      }
+    }
+  },
+  "o2": {
+    "_id": {
+      "$oid": "664b31528f0edc72c0213f11"
+    }
+  },
+  "needsRetryImage": "postImage",
+  "stmtId": 0,
+  "ts": {
+    "$timestamp": {
+      "t": 1716203869,
+      "i": 12
+    }
+  },
+  "t": 18,
+  "v": 2,
+  "wall": {
+    "$date": "2024-05-20T11:17:49.860Z"
+  },
+  "prevOpTime": {
+    "ts": {
+      "$timestamp": {
+        "t": 0,
+        "i": 0
+      }
+    },
+    "t": -1
+  }
+}]

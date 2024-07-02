@@ -76,7 +76,7 @@ func parseInsertOplog(oplog Oplog) string {
 	if _,exists := schemaTableRelations[oplog.NS]; !exists {
 		sql += createSchemaAndTableSQL(oplog)
 		schemaTableRelations[oplog.NS] = true
-	} 
+	}
 	fields := make([]string, 0)
 	values := make([]string,0)
 	
